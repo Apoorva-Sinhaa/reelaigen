@@ -2,7 +2,7 @@ import os
 
 # Set all Hugging Face cache directories BEFORE importing transformers
 # This ensures all downloads go to G: drive instead of C: drive
-cache_base = r"G:\huggingface_cache"
+cache_base = r"E:\huggingface_cache"
 os.environ["HF_HOME"] = cache_base
 os.environ["HUGGINGFACE_HUB_CACHE"] = os.path.join(cache_base, "hub")
 os.environ["HF_DATASETS_CACHE"] = os.path.join(cache_base, "datasets")
