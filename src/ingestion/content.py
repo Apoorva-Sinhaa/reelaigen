@@ -1,4 +1,6 @@
-from unstructured.partition.auto import partition
+from unstructured.partition.auto import partition # type: ignore
+
+
 class Content:
     def __init__(self, file_path: str):
         self.allText = ""
@@ -15,3 +17,9 @@ class Content:
 
         if not self.allText.strip():
             print("[WARN] No extractable text found.")
+
+        def get_data(self):
+            return {
+                "allText": self.allText,
+                "noOfSep": self.noOfSep,
+            }

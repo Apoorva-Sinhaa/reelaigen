@@ -1,4 +1,5 @@
 import os
+from ingestion.content import Content
 
 # Set all Hugging Face cache directories BEFORE importing transformers
 # This ensures all downloads go to G: drive instead of C: drive
@@ -40,4 +41,3 @@ outputs = model.generate(
 
 generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 print(generated_text)
-
