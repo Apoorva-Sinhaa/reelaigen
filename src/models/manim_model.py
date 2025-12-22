@@ -8,11 +8,13 @@ os.environ["TRANSFORMERS_CACHE"] = os.path.join(CACHE_BASE, "models")
 from transformers import pipeline
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
+from manim_helpers._templates import template_map
 
 
 class ManimModel: 
     def __init__(self, model_name: str = "Qwen/Qwen2.5-3B-Instruct"):
-        self.templates = ['text_intro {{}}', 'text_outro {{}}', 'bullet_points {{}}', 'image_display {{}}', 'equation_display {{}}']
+        # Extract template names from template_map keys (remove function signature part)
+        self.templates = [f"{key.split('(')[0]} {{}}" for key in template_map.keys()]
         self.model_name = model_name
         self.pipeline = pipeline(
             "text-generation",
@@ -31,21 +33,27 @@ class ManimModel:
         parsed_template_array = ', '.join(self.templates)
 
 
-        format_instructions = """Return JSON in this exact format:
+        format_instructions = f"""Return JSON in this exact format:
 
-{
+{{
   "manimTemplateList": [
-    {
+    {{
       "startTime": 0,
       "endTime": 5,
+      "templateName": "text_intro {{}}",
+      "content": "string content to pass to the template function",
+      "timestamp": 0.0,
       "sceneDescription": "string describing the scene",
       "explanationLevel": "string describing the explanation level"
-    }
+    }}
   ]
-}
+}}
 
 Important:
 - startTime and endTime must be numbers (not strings)
+- templateName must be one of the available templates: {parsed_template_array}
+- content must be a string that will be passed as the first argument to the template function
+- timestamp must be a number (float) that will be passed as the second argument to the template function (typically use startTime or endTime)
 - sceneDescription should describe what will be shown in the manim scene
 - explanationLevel should indicate the level of detail (e.g., "basic", "intermediate", "advanced")
 - Create multiple entries in manimTemplateList to cover the entire video duration
