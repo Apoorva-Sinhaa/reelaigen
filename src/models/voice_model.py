@@ -8,6 +8,11 @@ import shutil
 import re
 from typing import List, Dict, Optional
 
+
+CACHE_BASE = os.getenv("HF_CACHE_BASE", r"G:\huggingface_cache")
+os.environ["HF_HOME"] = CACHE_BASE
+os.environ["TRANSFORMERS_CACHE"] = os.path.join(CACHE_BASE, "models")
+
 class VoiceModel:
     def __init__(self, model_name: str = "microsoft/speecht5_tts", 
                  vocoder_name: str = "microsoft/speecht5_hifigan"):
@@ -40,6 +45,30 @@ class VoiceModel:
         new_sample_rate = int(audio.frame_rate * speed)
         return audio._spawn(audio.raw_data, overrides={'frame_rate': new_sample_rate}).set_frame_rate(audio.frame_rate)
 
+    def generate_audio_from_reels(self, reels: List[Dict], output_path: str = "final_output.mp3", speed: float = 1.0):
+        """
+      
+            output_path: Path to save the output audio file
+            speed: Playback speed multiplier (1.0 = normal, 1.2 = 20% faster)
+        """
+        segments = []
+        current_time = 0
+        
+        for reel in reels:
+            narration = reel.get("narration", {})
+            text = narration.get("text", "")
+            estimated_sec = narration.get("estimatedSpeechSec", 0)
+            
+            if text:
+                segments.append({
+                    "text": text,
+                    "start": current_time,
+                    "end": current_time + estimated_sec
+                })
+                current_time += estimated_sec
+        
+        return self.generate_audio_from_segments(segments, output_path, speed)
+
     def generate_audio_from_segments(self, segments: List[Dict], output_path: str = "final_output.mp3", speed: float = 1.0):
         """Generates clear speech with speed control."""
         temp_dir = tempfile.mkdtemp()
@@ -69,7 +98,22 @@ class VoiceModel:
                 audio_files.append((final_wav, seg["start"], seg["end"]))
 
             final_combined = self._stitch_audio_segments(audio_files)
-            final_combined.export(output_path, format="mp3")
+            
+            file_ext = os.path.splitext(output_path)[1].lower()
+            output_format = "mp3" if file_ext == ".mp3" else "wav"
+            
+            try:
+                final_combined.export(output_path, format=output_format)
+            except FileNotFoundError:
+                if output_format == "mp3":
+                    # Fall back to wav if mp3 export fails (ffmpeg not installed)
+                    wav_path = os.path.splitext(output_path)[0] + ".wav"
+                    final_combined.export(wav_path, format="wav")
+                    print(f"Note: MP3 export requires ffmpeg. Saved as WAV instead: {wav_path}")
+                    output_path = wav_path
+                else:
+                    raise
+            
             print(f"Success! Saved to {output_path}")
 
         finally:
@@ -89,15 +133,28 @@ class VoiceModel:
 if __name__ == "__main__":
     model = VoiceModel()
     
-    my_segments = [
+    # Example using reels array format
+    example_reels = [
         {
-            "text": "Understanding the architecture of the Android platform is crucial for improving its security. We'll examine the various components and identify potential security weaknesses.", 
-            "start": 0, "end": 8
+            "reelId": "reel_1",
+            "topicId": "topic_1",
+            "narration": {
+                "text": "What is Android architecture? Android architecture consists of multiple layers that work together to provide a secure and efficient platform.",
+                "estimatedSpeechSec": 8
+            },
+            "explanationLevel": "beginner",
+            "visualIntent": []
         },
         {
-            "text": "Now we continue after a pause.", 
-            "start": 10, "end": 13
+            "reelId": "reel_2",
+            "topicId": "topic_1",
+            "narration": {
+                "text": "Now let's explore the security components in detail.",
+                "estimatedSpeechSec": 5
+            },
+            "explanationLevel": "intermediate",
+            "visualIntent": []
         }
     ]
     
-    model.generate_audio_from_segments(my_segments, speed=1.1)
+    model.generate_audio_from_reels(example_reels, speed=1.1)

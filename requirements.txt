@@ -3,3 +3,10 @@ langchain
 langchain-classic
 python-dotenv
 accelerate
+soundfile 
+unstructured
+unstructured[pdf]
+sentencepiece
+pydub
+torch
+torchaudio

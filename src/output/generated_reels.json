@@ -1,137 +1,110 @@
 {
   "documentMeta": {
     "title": "Analysis of Android Vulnerabilities and Modern Exploitation Techniques",
-    "audienceType": "Educational",
-    "difficulty": "Intermediate"
+    "audienceType": "Beginner",
+    "difficulty": "Introductory"
   },
   "topics": [
     {
-      "id": "android-vulnerabilities-exploits",
-      "name": "Android Vulnerabilities and Exploits",
-      "relevance": 8,
-      "estimatedDepth": "Detailed"
+      "id": "t1",
+      "name": "Android Architecture",
+      "relevance": 5,
+      "estimatedDepth": "Brief Overview"
+    },
+    {
+      "id": "t2",
+      "name": "Existing Threats and Security Weaknesses",
+      "relevance": 6,
+      "estimatedDepth": "Detailed Analysis"
+    },
+    {
+      "id": "t3",
+      "name": "Exploit Mitigation Techniques",
+      "relevance": 7,
+      "estimatedDepth": "In-Depth Explanation"
     }
   ],
   "reelsPlan": [
     {
-      "reelId": "reel-01",
-      "topicId": "android-vulnerabilities-exploits",
-      "title": "Introduction to Android Vulnerabilities",
+      "reelId": "r1",
+      "topicId": "t1",
+      "title": "Understanding Android Architecture",
       "targetDurationSec": 60,
       "audienceLevel": "Beginner",
       "keyPoints": [
-        "What is Android?",
-        "Why are vulnerabilities important in Android?"
+        "What is Android architecture?",
+        "How does it work?",
+        "Why is it important?"
       ]
     },
     {
-      "reelId": "reel-02",
-      "topicId": "android-vulnerabilities-exploits",
-      "title": "Understanding Android Architecture",
+      "reelId": "r2",
+      "topicId": "t2",
+      "title": "Analyzing Android Security Issues",
       "targetDurationSec": 90,
       "audienceLevel": "Intermediate",
       "keyPoints": [
-        "Components of Android",
-        "Security Challenges in Android"
+        "Identifying common Android vulnerabilities",
+        "Exploring potential attack vectors",
+        "Understanding the severity of these issues"
       ]
     },
     {
-      "reelId": "reel-03",
-      "topicId": "android-vulnerabilities-exploits",
-      "title": "Identifying Security Weaknesses",
+      "reelId": "r3",
+      "topicId": "t3",
+      "title": "Mitigating Android Vulnerabilities",
       "targetDurationSec": 120,
       "audienceLevel": "Advanced",
       "keyPoints": [
-        "Common Vulnerabilities in Android",
-        "Threat Analysis of Android Platform"
-      ]
-    },
-    {
-      "reelId": "reel-04",
-      "topicId": "android-vulnerabilities-exploits",
-      "title": "Mitigation Techniques for Vulnerabilities",
-      "targetDurationSec": 150,
-      "audienceLevel": "Expert",
-      "keyPoints": [
-        "Exploit Mitigation Strategies",
-        "Case Studies of Successful Mitigations"
+        "Discussing current exploit mitigation strategies",
+        "Demonstrating how to apply these techniques",
+        "Considering future developments"
       ]
     }
   ],
   "reels": [
     {
-      "reelId": "reel-01",
-      "topicId": "android-vulnerabilities-exploits",
+      "reelId": "r1",
+      "topicId": "t1",
       "narration": {
-        "text": "In today's world, Android dominates the smartphone market with over 80% share. But with great power comes great responsibility. Let's dive into the vulnerabilities lurking beneath the surface.",
+        "text": "? What is Android architecture? Well, Android architecture is a layered system that... It consists of several layers including the application layer, framework layer, and Linux kernel.",
         "estimatedSpeechSec": 60
       },
       "explanationLevel": "Beginner",
       "visualIntent": [
         {
           "type": "image",
-          "content": "Android smartphone screen"
-        },
-        {
-          "type": "video",
-          "content": "Introduction video of Android OS"
+          "content": "An image showing the layered structure of Android architecture."
         }
       ]
     },
     {
-      "reelId": "reel-02",
-      "topicId": "android-vulnerabilities-exploits",
+      "reelId": "r2",
+      "topicId": "t2",
       "narration": {
-        "text": "The Android platform is built on top of the Linux kernel, which makes it programmable and open. This dual nature attracts both developers and attackers. Let's explore the components that make up Android.",
+        "text": "? How do we identify common Android vulnerabilities? Let's dive into the details of these weaknesses and explore potential attack vectors that exploit them.",
         "estimatedSpeechSec": 90
       },
       "explanationLevel": "Intermediate",
       "visualIntent": [
         {
-          "type": "image",
-          "content": "Android architecture diagram"
-        },
-        {
           "type": "video",
-          "content": "Video explaining Android components"
+          "content": "A video clip demonstrating how malware can exploit vulnerabilities in the Android OS."
         }
       ]
     },
     {
-      "reelId": "reel-03",
-      "topicId": "android-vulnerabilities-exploits",
+      "reelId": "r3",
+      "topicId": "t3",
       "narration": {
-        "text": "We've seen how Android's openness can be exploited. Now, let's look at common vulnerabilities and how they affect users. From malware to zero-day exploits, there's no shortage of threats.",
+        "text": "? How can we mitigate Android vulnerabilities? We'll discuss current exploit mitigation strategies, such as sandboxing, runtime checks, and secure coding practices. We'll also look at how these techniques can be applied in real-world scenarios.",
         "estimatedSpeechSec": 120
       },
       "explanationLevel": "Advanced",
       "visualIntent": [
         {
-          "type": "image",
-          "content": "Vulnerability map of Android ecosystem"
-        },
-        {
-          "type": "video",
-          "content": "Video demonstrating threat analysis"
-        }
-      ]
-    },
-    {
-      "reelId": "reel-04",
-      "topicId": "android-vulnerabilities-exploits",
-      "narration": {
-        "text": "To keep Android safe, we need to understand how to mitigate these vulnerabilities. From patching to using security tools, let's explore effective strategies to protect our devices and data.",
-        "estimatedSpeechSec": 150
-      },
-      "explanationLevel": "Expert",
-      "visualIntent": [
-        {
-          "type": "image",
-          "content": "Security best practices infographic"
-        },
-        {
-          "type": "video",
-          "content": "Video showcasing successful mitigations"
+          "type": "code",
+          "content": "A code snippet demonstrating secure coding practices for Android."
         }
       ]
     }

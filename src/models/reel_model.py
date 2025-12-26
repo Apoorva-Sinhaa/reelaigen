@@ -2,7 +2,7 @@ import os
 from typing import Dict, Any
 import torch
 
-CACHE_BASE = os.getenv("HF_CACHE_BASE", r"D:\huggingface_cache")
+CACHE_BASE = os.getenv("HF_CACHE_BASE", r"G:\huggingface_cache")
 os.environ["HF_HOME"] = CACHE_BASE
 os.environ["TRANSFORMERS_CACHE"] = os.path.join(CACHE_BASE, "models")
 
@@ -86,6 +86,14 @@ CRITICAL REQUIREMENTS:
 4. Ensure reelId and topicId match between reelsPlan and reels entries
 5. Create engaging, educational narration that fits within the target duration
 
+NARRATION STYLE GUIDELINES (based on explanationLevel):
+- For "beginner" or "introductory" levels: Use QUESTION-AND-ANSWER format to hook viewers. Start with an engaging question, then provide the answer. Example: "What is Android architecture? Well, Android architecture is a layered system that..."
+- For "intermediate" levels: Mix Q&A style with direct explanations. You can use questions to introduce topics or break up longer explanations.
+- For "advanced" or "expert" levels: Use direct, technical explanations. Q&A format is optional but can still be used strategically to emphasize key concepts.
+- Always write naturally as if speaking directly to the viewer
+- Use question marks (?) appropriately for questions - the TTS will naturally handle the intonation
+- Keep narration conversational and engaging, like popular educational reel formats
+
 {format_instructions}
 
 VALIDATION CHECKLIST BEFORE RETURNING:
@@ -93,6 +101,7 @@ VALIDATION CHECKLIST BEFORE RETURNING:
 - Each reel has a matching reelsPlan entry (by reelId)
 - narration.estimatedSpeechSec is within ±10 seconds of targetDurationSec
 - All JSON is valid and properly formatted
+- Narration style matches the explanationLevel (Q&A for beginner, mixed for intermediate, direct for advanced)
 
 OUTPUT REQUIREMENTS:
 - Return ONLY the JSON object

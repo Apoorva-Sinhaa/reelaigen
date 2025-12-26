@@ -30,6 +30,7 @@ os.environ["TRANSFORMERS_CACHE"] = os.path.join(cache_base, "models")
 from ingestion.content import Content
 import json
 from models.reel_model import ReelModel
+from models.voice_model import VoiceModel
 import time
 
 def main():
@@ -48,17 +49,27 @@ def main():
     reel_model = ReelModel()
     reel_output = reel_model.generate_reel_data(content_data)
     
-    print("\nStep 3: Saving output...")
+    print("\nStep 3: Saving reel output...")
     output_path = "output/generated_reels.json"
     os.makedirs("output", exist_ok=True)
     
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(reel_output, f, indent=2)
     
-    print(f"✓ Reels saved to {output_path}")
-    print(f"Generated {len(reel_output.get('reelsContent', []))} reels")
+    reels = reel_output.get("reels", [])
+    print(f"Reels saved to {output_path}")
+    print(f"Generated {len(reels)} reels")
+    
+    if reels:
+        print("\nStep 4: Generating audio from reels...")
+        voice_model = VoiceModel()
+        audio_output_path = "output/newnewnew.mp3"
+        voice_model.generate_audio_from_reels(reels, output_path=audio_output_path, speed=1.0)
+        print(f"Audio saved to {audio_output_path}")
+    else:
+        print("No reels found in output, skipping audio generation")
 
     end_time = time.perf_counter()
-    print(f"Execution time taken: {end_time - start_time} seconds")
+    print(f"\nExecution time taken: {end_time - start_time} seconds")
 if __name__ == "__main__":
     main()
