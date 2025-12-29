@@ -34,45 +34,36 @@ TEMPLATE_MAP = {
 
 
 def convert_content_to_string(content):
-    """Convert content to string format expected by template functions."""
     if isinstance(content, str):
         return content
     elif isinstance(content, list):
-        # Join list items with newlines
         return '\n'.join(str(item) for item in content)
     elif isinstance(content, dict):
-        # Handle special cases for dict content
         if 'left' in content and 'right' in content:
-            # For comparison template
             return f"{content['left']}|{content['right']}"
         elif 'equation' in content:
-            # For graph_plot template
             return content['equation']
         elif 'from' in content and 'to' in content:
-            # For transformation template
             return f"{content['from']} -> {content['to']}"
         else:
-            # Generic dict conversion
             return str(content)
     else:
         return str(content)
 
 
 class ManimSceneGenerator(manim.Scene):
-    
     def __init__(self, json_path: str = None, **kwargs):
         super().__init__(**kwargs)
         if json_path is None:
             json_path = Path(__file__).parent / "output" / "example_manim_json.json"
         self.json_path = str(json_path)
         self.template_data = self._load_json()
-        self.current_objects = []  # Track objects currently on screen
+        self.current_objects = []  
     
     def _load_json(self):
-        """Load and parse the JSON file."""
         json_path = Path(self.json_path)
         if not json_path.exists():
-            raise FileNotFoundError(f"JSON file not found: {json_path}")
+            raise FileNotFoundError(f"not found: {json_path}")
         
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f)
