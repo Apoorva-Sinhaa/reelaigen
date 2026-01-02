@@ -10,3 +10,4 @@ sentencepiece
 pydub
 torch
 torchaudio
+manim-voiceover[gtts]

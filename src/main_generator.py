@@ -1,6 +1,8 @@
 import json
 import manim
 from pathlib import Path
+from manim_voiceover import VoiceoverScene
+from manim_voiceover.services.gtts import GTTSService
 from manim_helpers._templates import (
     manim_text_intro,
     manim_text_outro,
@@ -51,7 +53,16 @@ def convert_content_to_string(content):
         return str(content)
 
 
-class ManimSceneGenerator(manim.Scene):
+# YAHAA PAR DALNA TEXT, jo object haia example_manim_json me usme ek "text or whatever" jo ye bolega 
+def get_narration_text(item, content_str):
+    if 'narration' in item and isinstance(item['narration'], dict):
+        narration = item['narration'].get('text', '')
+        if narration:
+            return narration
+    return content_str
+
+
+class ManimSceneGenerator(VoiceoverScene):
     def __init__(self, json_path: str = None, **kwargs):
         super().__init__(**kwargs)
         if json_path is None:
@@ -69,6 +80,8 @@ class ManimSceneGenerator(manim.Scene):
             return json.load(f)
     
     def construct(self):
+        self.set_speech_service(GTTSService())
+        
         for item in self.template_data:
             template_name = item.get('templateName')
             content = item.get('content')
@@ -87,6 +100,7 @@ class ManimSceneGenerator(manim.Scene):
             template_func = TEMPLATE_MAP[template_name]
             
             content_str = convert_content_to_string(content)
+            narration_text = get_narration_text(item, content_str)
             
             try:
                 manim_obj = template_func(content_str, timestamp)
@@ -98,13 +112,14 @@ class ManimSceneGenerator(manim.Scene):
                 self.play(manim.FadeOut(*self.current_objects), run_time=0.5)
                 self.current_objects = []
             
-            fade_in_time = min(1.0, duration * 0.3)  
-            wait_time = max(0, duration - fade_in_time)
-            
-            self.play(manim.FadeIn(manim_obj), run_time=fade_in_time)
-            
-            if wait_time > 0:
-                self.wait(wait_time)
+            with self.voiceover(text=narration_text) as tracker:
+                fade_in_time = min(1.0, duration * 0.3)  
+                wait_time = max(0, duration - fade_in_time)
+                
+                self.play(manim.FadeIn(manim_obj), run_time=fade_in_time)
+                
+                if wait_time > 0:
+                    self.wait(wait_time)
             
             self.current_objects = [manim_obj]
         
